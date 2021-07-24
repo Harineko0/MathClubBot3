@@ -1,5 +1,6 @@
 package net.pibrary;
 
+import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import net.pibrary.commands.ForumCommand;
 import net.pibrary.commands.FunnyCommand;
@@ -12,8 +13,9 @@ public class MathClubBot3 {
         ForumTask.startNoticeTask();
 
         DiscordListener listener = DiscordListener.getInstance();
-        DiscordGatewayHolder.getInstance().getGateway().on(MessageCreateEvent.class).subscribe(listener::messageCreate);
-        DiscordGatewayHolder.getInstance().getGateway().on(MessageCreateEvent.class).subscribe(FunnyCommand::sendHaruHaru);
+        GatewayDiscordClient gateway = DiscordGatewayHolder.getInstance().getGateway();
+        gateway.on(MessageCreateEvent.class).subscribe(listener::messageCreate);
+        gateway.on(MessageCreateEvent.class).subscribe(FunnyCommand::sendHaruHaru);
 
         listener.onMessageCreate().subscribe(ForumCommand::getForum);
     }
