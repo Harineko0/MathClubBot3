@@ -8,8 +8,12 @@ import net.pibrary.discord.DiscordGatewayHolder;
 import net.pibrary.discord.DiscordListener;
 import net.pibrary.forum.ForumTask;
 
+import java.util.Locale;
+
 public class MathClubBot3 {
     public static void main(String[] args) {
+        Locale.setDefault(Locale.JAPAN);
+
         ForumTask.startNoticeTask();
 
         DiscordListener listener = DiscordListener.getInstance();
