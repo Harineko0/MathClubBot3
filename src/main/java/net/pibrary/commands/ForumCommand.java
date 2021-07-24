@@ -18,10 +18,9 @@ public class ForumCommand {
                 if (threads != null) {
                     ForumNotifier notifier = new ForumNotifier();
                     notifier.sendNotice(threads, event.getChannelId());
-                    System.out.println(threads);
                 }
             } catch (NumberFormatException e) {
-                System.out.println(e);
+                e.printStackTrace();
             }
         }
     }
