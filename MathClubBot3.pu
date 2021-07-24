@@ -1,0 +1,115 @@
+@startuml MathClubBot3
+namespace commands {
+    class ForumCommand {
+        + {static} getForum(CommandSendEvent event)
+    }
+
+    class FunnyCommand {
+        + {static} sendHaruHaru(MessageCreateEvent event)
+    }
+}
+
+namespace discord {
+    class DiscordClientHolder {
+        - {static} DiscordClientHolder instance
+        - GatewayDiscordClient client
+        + {static} DiscordClientHolder getInstance()
+        - DiscordClientHolder()
+        + GatewayDiscordClient getClient()
+    }
+
+    class DiscordListener {
+        - {static} DiscordListener instance
+        - ISubject<CommandSendEvent> commandSendSubject
+        + {static} DiscordListener getInstance()
+        - DiscordListener()
+        + Observable<CommandSendEvent> onMessageCreate()
+        + messageCreate(MessageCreateEvent event)
+    }
+}
+
+namespace events {
+    class CommandSendEvent {
+        - List<String> args
+        - Snowflake channelId
+        + CommandSendEvent(List<String> args, Snowflake channelId)
+        + getArgs() : List<String>
+        + getArg(int index) : String
+        + getChannelId() : Snowflake
+    }
+}
+
+namespace forum {
+    class ForumThread {
+        + int id
+        + int replyId
+        + int log
+        + String subject
+        + String text
+        + String author
+        + Date date
+    }
+
+    class ForumThreadFactory {
+        + createForumThread(Document document) : ForumThread
+    }
+
+    class ForumScraper {
+        - String forumUrl
+        - int maxPage
+        + getRecentThreads(int hours) : List<ForumThread>
+    }
+
+    class ForumNotifier {
+        - Snowflake channelId
+        + sendNotice(List<ForumThread> threads)
+        + sendNotice(List<ForumThread> threads, Snowflake channelId)
+    }
+
+    class ForumTask {
+        - int intervalHours
+        + startScraping()
+    }
+
+    ForumThread <.. ForumThreadFactory
+    ForumThreadFactory <.. ForumScraper
+    ForumScraper <.. ForumTask
+    ForumNotifier <.. ForumTask
+}
+
+namespace rx {
+    interface ISubject<T> extends Observer, Observable {
+    }
+
+    interface Observable<T> {
+        + subscribe(Observer<T> observer)
+    }
+
+    interface Observer<T> {
+        + onNext(T value)
+    }
+
+    class Subject<T> implements ISubject {
+        - Set<Observer<T>> observers
+        + subscribe(Observer<T> observer)
+        + subscribe(Consumer<T> function)
+        + onNext(T value)
+    }
+
+    Subject *-- Observer
+}
+
+class MathClubBot3 {
+    + main()
+}
+
+discord.DiscordClientHolder <.. forum.ForumNotifier
+events.CommandSendEvent <.. discord.DiscordListener
+events.CommandSendEvent <.. commands.ForumCommand
+rx.Subject <.. discord.DiscordListener
+forum.ForumTask <.. MathClubBot3
+commands.FunnyCommand <.. MathClubBot3
+commands.ForumCommand <.. MathClubBot3
+discord.DiscordListener <.. MathClubBot3
+discord.DiscordClientHolder <.. MathClubBot3
+@enduml
