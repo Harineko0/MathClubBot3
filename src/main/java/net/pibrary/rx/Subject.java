@@ -5,7 +5,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 public class Subject<T> implements ISubject<T> {
-    Set<Observer<T>> observers = new HashSet<>();
+    private Set<Observer<T>> observers = new HashSet<>();
 
     @Override
     public void subscribe(Observer<T> observer) {
