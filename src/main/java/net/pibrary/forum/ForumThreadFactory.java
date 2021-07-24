@@ -53,23 +53,13 @@ public class ForumThreadFactory {
 
     private Date getDate(String element){
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 (E) HH時mm分");
-        StringBuilder stringDate = new StringBuilder();
-
-        for(int i = element.length()-2; i>0; i--){
-            char c = element.charAt(i);
-            //[なら繰り返しを抜ける
-            if(c == '['){
-                break;
-            }
-            stringDate.insert(0, c);
-        }
-        Date date = new Date();
+        String dateElement = element.substring(element.indexOf("[20") + 1, element.indexOf("] </font>"));
         try {
-            date = dateFormat.parse(stringDate.toString());
+            return dateFormat.parse(dateElement);
         } catch (ParseException e){
             e.printStackTrace();
+            return new Date();
         }
-        return date;
     }
 
     private String getAuthor(String element){
@@ -111,7 +101,7 @@ public class ForumThreadFactory {
 ////            int threadId = Integer.parseInt(html.substring(html.indexOf("\"3\">[") + 5, html.indexOf("]<b>") - 1));
 ////            System.out.println(threadId);
 //            System.out.println(getId(element.text()));
-            System.out.println(getId(element.text()) + ", " + id);
+//            System.out.println(getId(element.text()) + ", " + id);
             if (getId(element.text()) == id){
                 return element.select("blockquote").text();
             }
