@@ -106,6 +106,8 @@ class MathClubBot3 {
 discord.DiscordClientHolder <.. forum.ForumNotifier
 events.CommandSendEvent <.. discord.DiscordListener
 events.CommandSendEvent <.. commands.ForumCommand
+forum.ForumScraper <.. commands.ForumCommand
+forum.ForumNotifier <.. commands.ForumCommand
 rx.Subject <.. discord.DiscordListener
 forum.ForumTask <.. MathClubBot3
 commands.FunnyCommand <.. MathClubBot3
