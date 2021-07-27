@@ -3,23 +3,24 @@ package net.pibrary.discord;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
 import net.pibrary.events.CommandSendEvent;
-import net.pibrary.rx.Subject;
-import net.pibrary.rx.Observable;
-import net.pibrary.rx.SimpleSubject;
+import rx.Observable;
+import rx.subjects.BehaviorSubject;
+import rx.subjects.Subject;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 public class DiscordListener {
+    // region Singleton
     private static DiscordListener instance = new DiscordListener();
     public static DiscordListener getInstance() {
         return instance;
     }
     private DiscordListener() {}
+    // endregion
 
-    private Subject<CommandSendEvent> commandSendSubject = new SimpleSubject<>();
-
+    private Subject<CommandSendEvent, CommandSendEvent> commandSendSubject = BehaviorSubject.create();
     public Observable<CommandSendEvent> onMessageCreate() {
         return commandSendSubject;
     }
