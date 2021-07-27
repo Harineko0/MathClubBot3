@@ -93,17 +93,13 @@ public class ForumThreadFactory {
             }
         }
 
-        Elements centerElements = document.getElementsByTag("center");
-        centerElements.remove(0);
-//        System.out.println(centerElements);
-        for (Element element : centerElements) {
-////            String html = element.ownText();
-////            int threadId = Integer.parseInt(html.substring(html.indexOf("\"3\">[") + 5, html.indexOf("]<b>") - 1));
-////            System.out.println(threadId);
-//            System.out.println(getId(element.text()));
-//            System.out.println(getId(element.text()) + ", " + id);
-            if (getId(element.text()) == id){
-                return element.select("blockquote").text();
+        if (document != null) {
+            Elements centerElements = document.getElementsByTag("center");
+            centerElements.remove(0);
+            for (Element element : centerElements) {
+                if (getId(element.text()) == id) {
+                    return element.select("blockquote").text();
+                }
             }
         }
 
