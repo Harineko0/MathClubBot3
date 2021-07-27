@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ForumThreadFactory {
-    Map<String, Document> logToDoc = new HashMap<>();
+    Map<String, Document> urlToDoc = new HashMap<>();
 
     public List<ForumThread> createForumThread(Document document) {
         List<ForumThread> threads = new ArrayList<>();
@@ -82,12 +82,12 @@ public class ForumThreadFactory {
 
     private String getText(String url, int id){
         Document document = null;
-        if (logToDoc.containsKey(url)) {
-            document = logToDoc.get(url);
+        if (urlToDoc.containsKey(url)) {
+            document = urlToDoc.get(url);
         } else {
             try {
                 document = Jsoup.connect(url).get();
-                logToDoc.put(url, document);
+                urlToDoc.put(url, document);
             } catch (IOException e) {
                 e.printStackTrace();
             }
