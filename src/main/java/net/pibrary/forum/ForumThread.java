@@ -1,15 +1,19 @@
 package net.pibrary.forum;
 
+import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.rest.util.Color;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ForumThread {
-    protected int id;
-    protected int replyTo;
-    protected int log;
-    protected String subject;
-    protected String text;
-    protected String author;
-    protected Date date;
+    private int id;
+    private int replyTo;
+    private int log;
+    private String subject;
+    private String text;
+    private String author;
+    private Date date;
 
     public ForumThread(int id, int replyTo, int log, String subject, String text, String author, Date date) {
         this.id = id;
@@ -23,7 +27,9 @@ public class ForumThread {
 
     @Override
     public String toString() {
-        return "ForumThread{" +
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 (E) HH時mm分");
+
+        return "{" +
                 "id=" + id +
                 ", replyTo=" + replyTo +
                 ", log=" + log +
@@ -31,7 +37,7 @@ public class ForumThread {
                 ", subject='" + subject + '\'' +
                 ", text='" + text + '\'' +
                 ", author='" + author + '\'' +
-                ", date=" + date +
+                ", date=" + dateFormat.format(date) +
                 '}';
     }
 
@@ -69,5 +75,24 @@ public class ForumThread {
 
     public Date getDate() {
         return date;
+    }
+
+    public EmbedCreateSpec toEmbed() {
+        if (isParent()) {
+            return new EmbedCreateSpec()
+                    .setTitle("[" + id + "] " + subject)
+                    .setDescription(text)
+                    .setAuthor(author, getUrl(), "https://deliver.commons.nicovideo.jp/thumbnail/nc206071?size=l")
+                    .setColor(Color.GRAY);
+        }
+        else
+        {
+            return new EmbedCreateSpec()
+                    .setTitle("[" + id + "] " + subject)
+                    .setDescription(text)
+                    .setAuthor(author, getUrl(), "https://deliver.commons.nicovideo.jp/thumbnail/nc206071?size=l")
+                    .setFooter(">> [" + replyTo + "]", "https://www.silhouette-illust.com/wp-content/uploads/2016/10/15245-300x300.jpg")
+                    .setColor(Color.GRAY);
+        }
     }
 }
