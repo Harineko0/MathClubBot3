@@ -20,7 +20,7 @@ namespace discord {
 
     class DiscordListener {
         - {static} DiscordListener instance
-        - ISubject<CommandSendEvent> commandSendSubject
+        - Subject<CommandSendEvent> commandSendSubject
         + {static} DiscordListener getInstance()
         - DiscordListener()
         + Observable<CommandSendEvent> onMessageCreate()
@@ -44,7 +44,7 @@ namespace forum {
         + int id
         + int replyId
         + int log
-        + String subject
+        + String SimpleSubject
         + String text
         + String author
         + Date date
@@ -78,7 +78,7 @@ namespace forum {
 }
 
 namespace rx {
-    interface ISubject<T> extends Observer, Observable {
+    interface Subject<T> extends Observer, Observable {
     }
 
     interface Observable<T> {
@@ -89,29 +89,18 @@ namespace rx {
         + onNext(T value)
     }
 
-    class Subject<T> implements ISubject {
+    class SimpleSubject<T> implements Subject {
         - Set<Observer<T>> observers
         + subscribe(Observer<T> observer)
         + subscribe(Consumer<T> function)
         + onNext(T value)
     }
 
-    Subject *-- Observer
+    SimpleSubject *-- Observer
 }
 
-class MathClubBot3 {
-    + main()
-}
-
-discord.DiscordClientHolder <.. forum.ForumNotifier
 events.CommandSendEvent <.. discord.DiscordListener
-events.CommandSendEvent <.. commands.ForumCommand
 forum.ForumScraper <.. commands.ForumCommand
 forum.ForumNotifier <.. commands.ForumCommand
-rx.Subject <.. discord.DiscordListener
-forum.ForumTask <.. MathClubBot3
-commands.FunnyCommand <.. MathClubBot3
-commands.ForumCommand <.. MathClubBot3
-discord.DiscordListener <.. MathClubBot3
-discord.DiscordClientHolder <.. MathClubBot3
+rx.Subject <-- discord.DiscordListener
 @enduml
