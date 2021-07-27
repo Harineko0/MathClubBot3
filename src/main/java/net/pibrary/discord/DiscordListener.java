@@ -3,9 +3,9 @@ package net.pibrary.discord;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
 import net.pibrary.events.CommandSendEvent;
-import net.pibrary.rx.ISubject;
-import net.pibrary.rx.Observable;
 import net.pibrary.rx.Subject;
+import net.pibrary.rx.Observable;
+import net.pibrary.rx.SimpleSubject;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -18,7 +18,7 @@ public class DiscordListener {
     }
     private DiscordListener() {}
 
-    private ISubject<CommandSendEvent> commandSendSubject = new Subject<>();
+    private Subject<CommandSendEvent> commandSendSubject = new SimpleSubject<>();
 
     public Observable<CommandSendEvent> onMessageCreate() {
         return commandSendSubject;
