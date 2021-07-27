@@ -23,5 +23,6 @@ public class MathClubBot3 {
         gateway.on(MessageCreateEvent.class).subscribe(FunnyCommand::sendHaruHaru);
 
         listener.onMessageCreate().subscribe(ForumCommand::getForum);
+        listener.onMessageCreate().subscribe(ForumCommand::searchThread);
     }
 }

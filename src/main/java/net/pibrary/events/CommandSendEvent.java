@@ -13,7 +13,11 @@ public class CommandSendEvent {
         this.channelId = channelId;
     }
 
-    public List<String> getArgs(){
+    public int getArgSize() {
+        return args.size();
+    }
+
+    public List<String> getArgs() {
         return args;
     }
 
