@@ -13,9 +13,10 @@ import java.util.stream.Stream;
 public class ForumScraper {
 
     public List<ForumThread> getRecentThreads(int intervalHours) {
+        final int maxPage = 1;
+
         List<ForumThread> recentThreads = new ArrayList<>();
-        List<String> urlToScrape = getUrlToScrape();
-        List<ForumThread> allThreads = getAllThreads(urlToScrape);
+        List<ForumThread> allThreads = getAllThreads(maxPage);
         if (allThreads == null) { return null; }
         long currentTime = new Date().getTime();
 
@@ -30,11 +31,12 @@ public class ForumScraper {
         return recentThreads;
     }
 
-    private List<ForumThread> getAllThreads(List<String> urlToScrape) {
+    public List<ForumThread> getAllThreads(int page) {
         List<ForumThread> threads = new ArrayList<>();
+        List<String> urlToScrape = getUrlToScrape(page);
 
         for (String forumUrl : urlToScrape) {
-            Document document = null;
+            Document document;
             try {
                 document = Jsoup.connect(forumUrl).get();
             } catch (IOException e) {
@@ -51,11 +53,11 @@ public class ForumScraper {
         return threads;
     }
 
-    private List<String> getUrlToScrape() {
+    private List<String> getUrlToScrape(int maxPage) {
         final String baseForumUrl = "http://bbs2.sekkaku.net/bbs/sukenqanda/page=";
         List<String> forumUrls = new ArrayList<>();
 
-        for (int i = 0; i < 1; i++) { //ページ数指定
+        for (int i = 0; i < maxPage; i++) { //ページ数指定
             int page = 1 + i * 10;
             String forumUrl = baseForumUrl + page;
             forumUrls.add(forumUrl);

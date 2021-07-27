@@ -54,7 +54,7 @@ public class ForumThreadFactory {
 
     private Date getDate(String element){
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 (E) HH時mm分");
-        String dateElement = element.substring(element.indexOf("[20") + 1, element.indexOf("] </font>"));
+        String dateElement = element.substring(element.indexOf("[20") + 1, element.indexOf("分]") + 1);
         try {
             return dateFormat.parse(dateElement);
         } catch (ParseException e){
@@ -83,10 +83,10 @@ public class ForumThreadFactory {
 
     private String getText(String url, int id){
         List<ForumText> texts = null;
-        ForumTextStore store = ForumTextStore.getInstance();
+        ForumTextStore textStore = ForumTextStore.getInstance();
 
-        if (store.hasTexts(url)) {
-            texts = store.getTexts(url);
+        if (textStore.hasTexts(url)) {
+            texts = textStore.getTexts(url);
         } else {
             try {
                 texts = new ArrayList<>();
@@ -95,11 +95,10 @@ public class ForumThreadFactory {
                 centerElements.remove(0);
                 for (Element element : centerElements) {
                     ForumText text = new ForumText(getId(element.text()), element.select("blockquote").text());
-                    System.out.println(text);
                     texts.add(text);
                 }
 
-                store.putTexts(url, texts);
+                textStore.putTexts(url, texts);
             } catch (IOException e) {
                 e.printStackTrace();
             }
