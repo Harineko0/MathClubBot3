@@ -8,10 +8,11 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class ForumThreadFactory {
-    Map<String, Document> urlToDoc = new HashMap<>();
 
     public List<ForumThread> createForumThread(Document document) {
         List<ForumThread> threads = new ArrayList<>();
@@ -81,24 +82,33 @@ public class ForumThreadFactory {
     }
 
     private String getText(String url, int id){
-        Document document = null;
-        if (urlToDoc.containsKey(url)) {
-            document = urlToDoc.get(url);
+        List<ForumText> texts = null;
+        ForumTextStore store = ForumTextStore.getInstance();
+
+        if (store.hasTexts(url)) {
+            texts = store.getTexts(url);
         } else {
             try {
-                document = Jsoup.connect(url).get();
-                urlToDoc.put(url, document);
+                texts = new ArrayList<>();
+                Document document = Jsoup.connect(url).get();
+                Elements centerElements = document.getElementsByTag("center");
+                centerElements.remove(0);
+                for (Element element : centerElements) {
+                    ForumText text = new ForumText(getId(element.text()), element.select("blockquote").text());
+                    System.out.println(text);
+                    texts.add(text);
+                }
+
+                store.putTexts(url, texts);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
-        if (document != null) {
-            Elements centerElements = document.getElementsByTag("center");
-            centerElements.remove(0);
-            for (Element element : centerElements) {
-                if (getId(element.text()) == id) {
-                    return element.select("blockquote").text();
+        if (texts != null) {
+            for (ForumText text : texts) {
+                if (text.getId() == id) {
+                    return text.getText();
                 }
             }
         }
