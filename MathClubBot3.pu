@@ -65,14 +65,6 @@ namespace forum {
         + startScraping()
     }
 
-    class ThreadStore <<Singleton>> {
-        - Map<Integer, ForumThread> idToThread
-        + getThread(int id)
-        + putThread(ForumThread thread)
-        + hasThread(int id)
-        + findThread()
-    }
-
     class ForumTextStore <<Singleton>> {
         - Map<URL, ForumText> urlToText
         + getForumText(URL url)
@@ -92,7 +84,6 @@ namespace forum {
     ForumThreadFactory <-- ForumScraper
     ForumScraper <-- ForumTask
     ForumNotifier <-- ForumTask
-    ThreadStore <-- ForumScraper
     ForumTextStore <-- ForumThreadFactory
     ForumText <-- ForumThreadFactory
 }
