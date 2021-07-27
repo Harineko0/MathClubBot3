@@ -7,4 +7,4 @@ jarファイルと同じパスにDiscordBotのトークンが記入されたprop
 
 # クラス図
 PlantUMLで記述したクラス図([MathClubBot3.pu](MathClubBot3.pu))の画像です。
-![MathClubBot3](https://user-images.githubusercontent.com/35805963/126868340-4fbe079e-8162-423b-bdf6-899dc27249fd.png)
+![MathClubBot3](MathClubBot3](https://user-images.githubusercontent.com/35805963/127187463-c0ded713-340e-4b25-9352-7f53b17d0437.png)
