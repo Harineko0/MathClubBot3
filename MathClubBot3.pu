@@ -73,11 +73,19 @@ namespace forum {
         + findThread()
     }
 
-    class DocumentStore <<Singleton>> {
-        - Map<URL, String> urlToDoc
-        + getDocument(URL url)
-        + putDocument(URL url, String document)
-        + hasDocument(URL url)
+    class ForumTextStore <<Singleton>> {
+        - Map<URL, ForumText> urlToText
+        + getForumText(URL url)
+        + putForumText(URL url, ForumText text)
+        + hasForumText(URL url)
+    }
+
+    class ForumText {
+        - int id
+        - String text
+        + ForumText(int id, String text)
+        + getId()
+        + getText()
     }
 
     ForumThread <-- ForumThreadFactory
@@ -85,7 +93,8 @@ namespace forum {
     ForumScraper <-- ForumTask
     ForumNotifier <-- ForumTask
     ThreadStore <-- ForumScraper
-    DocumentStore <-- ForumThreadFactory
+    ForumTextStore <-- ForumThreadFactory
+    ForumText <-- ForumThreadFactory
 }
 
 events.CommandSendEvent o-- discord.DiscordListener
