@@ -9,19 +9,15 @@ public class ForumTask extends TimerTask {
     private final int intervalHour = 12;
 
     public void startNoticeTask() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.HOUR, intervalHour);
-        Date date = calendar.getTime();
+        int intervalPeriod = intervalHour * 60 * 60 * 1000;
 
         Timer timer = new Timer();
-        timer.schedule(this, date);
+        timer.schedule(this, 0, intervalPeriod);
     }
 
     @Override
     public void run() {
         List<ForumThread> recentThreads = scraper.getRecentThreads(intervalHour);
         notifier.sendNotice(recentThreads);
-        startNoticeTask();
-        this.cancel();
     }
 }
